@@ -80,9 +80,9 @@ main_interface() {
     while true; do
         # Create menu items
         local menu_items=""
-        menu_items+="Input Language -> $INPUT_LANG\n"
-        menu_items+="Output Language -> $OUTPUT_LANG\n"
-        menu_items+="Swap Languages"
+        menu_items+="  Input Language -> $INPUT_LANG\n"
+        menu_items+="  Output Language -> $OUTPUT_LANG\n"
+        menu_items+="⇵  Swap Languages"
         
         # Show rofi menu
         local selection=$(echo -e "$menu_items" | rofi -dmenu -i -p "" -format "s")
