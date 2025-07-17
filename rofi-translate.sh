@@ -5,7 +5,7 @@
 # Default languages
 DEFAULT_INPUT_LANG="English"
 DEFAULT_OUTPUT_LANG="Russian"
-SELECTED_SIGN="❅"
+SELECTED_SIGN="⪧"
 
 CACHE_DIR="$HOME/.cache/rofi-translate"
 LANG_FILE="$CACHE_DIR/rofi-translate-languages.conf"
@@ -57,7 +57,7 @@ select_language() {
 
     # Trim
     if [[ -n "$selection" ]]; then
-        echo "$selection" | sed -E "s/^($selected_sign|  )//"
+        echo "$selection" | cut -c3-
     fi
 }
 
@@ -84,20 +84,14 @@ main_interface() {
         menu_items+="Output Language -> $OUTPUT_LANG\n"
         menu_items+="Swap Languages"
         
-        # Create message with current translation
-        local mesg=""
-        if [[ -n "$last_translation" ]]; then
-            mesg="$last_translation"
-        fi
-        
         # Show rofi menu
-        local selection=$(echo -e "$menu_items" | rofi -dmenu -i -p "" -format "s" -mesg "$mesg")
+        local selection=$(echo -e "$menu_items" | rofi -dmenu -i -p "" -format "s")
         
         # Handle selection
         if [[ -z "$selection" ]]; then
             break
         elif [[ "$selection" == *"Input Language"* ]]; then
-            local new_lang=$(select_language "$INPUT_LANG" "Select Input Language")
+            local new_lang=$(select_language "$INPUT_LANG" "Select Input Language ->")
             if [[ -n "$new_lang" ]]; then
                 INPUT_LANG="$new_lang"
                 save_languages
@@ -107,7 +101,7 @@ main_interface() {
                 fi
             fi
         elif [[ "$selection" == *"Output Language"* ]]; then
-            local new_lang=$(select_language "$OUTPUT_LANG" "Select Output Language")
+            local new_lang=$(select_language "$OUTPUT_LANG" "Select Output Language ->")
             if [[ -n "$new_lang" ]]; then
                 OUTPUT_LANG="$new_lang"
                 save_languages
