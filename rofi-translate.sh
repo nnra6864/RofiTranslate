@@ -57,7 +57,7 @@ select_language() {
 
     # Trim
     if [[ -n "$selection" ]]; then
-        echo "$selection" | cut -c3-
+        echo $(echo "$selection" | sed "s/^$SELECTED_SIGN *//")
     fi
 }
 
@@ -85,7 +85,7 @@ main_interface() {
         menu_items+="⇵  Swap Languages"
         
         # Show rofi menu
-        local selection=$(echo -e "$menu_items" | rofi -dmenu -i -p "" -format "s")
+        local selection=$(echo -e "$menu_items" | rofi -dmenu -i -p " " -format "s")
         
         # Handle selection
         if [[ -z "$selection" ]]; then
