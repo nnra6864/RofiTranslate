@@ -17,7 +17,7 @@ paru -S translate-shell
 ```
 
 # Usage
-Simply luanch the script directly:
+Simply launch the script directly:
 ```
 sh RofiTranslate.sh
 ```
@@ -27,4 +27,4 @@ Or even better, make a bind for it *(Hyprland Example)*:
 bind = $mainMod ALT, T, exec, ~/Packages/RofiTranslate/RofiTranslate.sh
 ```
 
-Once Rofi Translate is open, select the input and output languages, type whatever you want to translate, and simply press Enter. Output will be copied to your clipboard.
+Once Rofi Translate is open, select the Input and Output Languages, type whatever you want to translate, and simply press Enter. Output will be copied to your clipboard.
