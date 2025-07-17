@@ -80,8 +80,8 @@ main_interface() {
     while true; do
         # Create menu items
         local menu_items=""
-        menu_items+="  Input Language -> $INPUT_LANG\n"
-        menu_items+="  Output Language -> $OUTPUT_LANG\n"
+        menu_items+="  Input Language $SELECTED_SIGN $INPUT_LANG\n"
+        menu_items+="  Output Language $SELECTED_SIGN $OUTPUT_LANG\n"
         menu_items+="⇵  Swap Languages"
         
         # Show rofi menu
