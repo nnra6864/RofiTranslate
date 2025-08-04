@@ -3,9 +3,11 @@
 # Dependencies: rofi, translate-shell
 
 # Default languages
-DEFAULT_INPUT_LANG="English"
-DEFAULT_OUTPUT_LANG="Russian"
+DEFAULT_INPUT_LANG="en"
+DEFAULT_OUTPUT_LANG="ru"
 SELECTED_SIGN="⪧"
+SHOW_TRANSLATION=true
+TRANSLATION_CHARS_PER_LINE=50
 
 CACHE_DIR="$HOME/.cache/rofi-translate"
 LANG_FILE="$CACHE_DIR/rofi-translate-languages.conf"
@@ -72,13 +74,48 @@ translate_text() {
     fi
 }
 
-# Main interface with real-time translation using a loop
+# Wraps the text into lines
+wrap_text() {
+    local text="$1"
+    local width="${2:-60}"
+    local current=""
+
+    lines=()
+    local words
+    read -ra words <<<"$text"
+
+    for w in "${words[@]}"; do
+        # If adding the next word would overflow the line, flush it.
+        if [[ ${#current} -gt 0 && $((${#current} + ${#w} + 1)) -gt width ]]; then
+            lines+=("$current")
+            current="$w"
+        else
+            # Build the current line.
+            [[ -n $current ]] && current+=" "
+            current+="$w"
+        fi
+    done
+
+    # Don’t forget the last line if anything is left.
+    [[ -n $current ]] && lines+=("$current")
+}
+
+# Shows the translated text
+show_translation() {
+    local translation="$1"
+
+    if [[ "$SHOW_TRANSLATION" == "true" ]]; then
+        wrap_text "$translation" "${TRANSLATION_CHARS_PER_LINE}"
+        printf '%s\n' "${lines[@]}" | rofi -dmenu -i -p "🗐 Translation copied to clipboard"
+    fi
+}
+
+# Main interface
 main_interface() {
     local last_input=""
     local last_translation=""
     
     while true; do
-        # Create menu items
         local menu_items=""
         menu_items+="  Input Language $SELECTED_SIGN $INPUT_LANG\n"
         menu_items+="  Output Language $SELECTED_SIGN $OUTPUT_LANG\n"
@@ -136,6 +173,7 @@ main_interface() {
                 echo "Warning: No clipboard tool found!" >&2
             fi
 
+            show_translation "$last_translation"
             exit
         fi
     done
